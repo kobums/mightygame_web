@@ -95,11 +95,11 @@ export default {
       loading: true,
       refreshInterval: null,
       isHost: false,
-      myPlayerId: parseInt(localStorage.getItem("myPlayerId")),
+      myPlayerId: parseInt(sessionStorage.getItem("myPlayerId")),
     };
   },
   async mounted() {
-    this.roomId = this.$route.params.id;
+    this.roomId = parseInt(this.$route.params.id);
     await this.fetchRoomDetail();
 
     // Auto-refresh room status every 2 seconds
@@ -130,8 +130,15 @@ export default {
           this.room = response.room;
 
           // Check if current player is host
-          this.myPlayerId = parseInt(localStorage.getItem("myPlayerId"));
+          this.myPlayerId = parseInt(sessionStorage.getItem("myPlayerId"));
           this.isHost = this.room.hostId === this.myPlayerId;
+
+          // Check if game has started - if so, redirect all players to game screen
+          if (this.room.status === "playing") {
+            console.log("Game started! Redirecting to game screen...");
+            this.$router.push(`/game/${this.roomId}`);
+            return;
+          }
 
           // Debug log
           console.log("Room Detail:", {
@@ -139,7 +146,8 @@ export default {
             myPlayerId: this.myPlayerId,
             hostId: this.room.hostId,
             isHost: this.isHost,
-            currentPlayers: this.room.currentPlayers
+            currentPlayers: this.room.currentPlayers,
+            status: this.room.status
           });
         } else {
           console.error("Failed to fetch room detail:", response.message);
@@ -154,18 +162,34 @@ export default {
     },
     async startGame() {
       try {
-        const myPlayerId = parseInt(localStorage.getItem("myPlayerId"));
+        const myPlayerId = parseInt(sessionStorage.getItem("myPlayerId"));
+
+        console.log("=== Starting game ===");
+        console.log("roomId:", this.roomId, "type:", typeof this.roomId);
+        console.log("playerId:", myPlayerId, "type:", typeof myPlayerId);
+        console.log("room data:", this.room);
+
         const response = await api.startGame(this.roomId, myPlayerId);
 
+        console.log("=== Start game response ===");
+        console.log("Full response:", response);
+        console.log("Response code:", response.code);
+        console.log("Response message:", response.message);
+
         if (response.code === "success" || response.code === "ok") {
+          console.log("Success! Navigating to game...");
           // Navigate to game
           this.$router.push(`/game/${this.roomId}`);
         } else {
+          console.error("Start game failed with response:", response);
           alert(response.message || "게임 시작에 실패했습니다");
         }
       } catch (error) {
-        console.error("Failed to start game:", error);
-        alert("게임 시작 중 오류가 발생했습니다");
+        console.error("=== Failed to start game (exception) ===");
+        console.error("Error object:", error);
+        console.error("Error message:", error.message);
+        console.error("Error stack:", error.stack);
+        alert("게임 시작 중 오류가 발생했습니다: " + error.message);
       }
     },
     confirmLeave() {
@@ -175,22 +199,22 @@ export default {
     },
     async leaveRoom() {
       try {
-        const myPlayerId = parseInt(localStorage.getItem("myPlayerId"));
+        const myPlayerId = parseInt(sessionStorage.getItem("myPlayerId"));
         await api.leaveRoom(this.roomId, myPlayerId);
-        localStorage.removeItem("currentRoomId");
+        sessionStorage.removeItem("currentRoomId");
         this.$router.push("/lobby");
       } catch (error) {
         console.error("Failed to leave room:", error);
         // Go back anyway
-        localStorage.removeItem("currentRoomId");
+        sessionStorage.removeItem("currentRoomId");
         this.$router.push("/lobby");
       }
     },
     leaveRoomQuietly() {
       // Silent leave without navigation (for page close)
       try {
-        const myPlayerId = parseInt(localStorage.getItem("myPlayerId"));
-        const roomId = localStorage.getItem("currentRoomId");
+        const myPlayerId = parseInt(sessionStorage.getItem("myPlayerId"));
+        const roomId = sessionStorage.getItem("currentRoomId");
         if (myPlayerId && roomId) {
           // Use sendBeacon for reliable page unload
           const data = JSON.stringify({ roomId: parseInt(roomId), playerId: myPlayerId });

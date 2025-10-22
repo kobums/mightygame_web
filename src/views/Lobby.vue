@@ -172,8 +172,8 @@ export default {
         if (response.code === "success" || response.code === "ok") {
           // Save player info and room info
           this.$store.commit("SET_MY_PLAYER_ID", response.playerId);
-          localStorage.setItem("myPlayerId", response.playerId);
-          localStorage.setItem("currentRoomId", this.selectedRoom.id);
+          sessionStorage.setItem("myPlayerId", response.playerId);
+          sessionStorage.setItem("currentRoomId", this.selectedRoom.id);
 
           // Navigate to waiting room
           this.$router.push(`/room/${this.selectedRoom.id}`);
@@ -190,8 +190,8 @@ export default {
 
       // Save player info and room info
       this.$store.commit("SET_MY_PLAYER_ID", data.playerId);
-      localStorage.setItem("myPlayerId", data.playerId);
-      localStorage.setItem("currentRoomId", data.roomId);
+      sessionStorage.setItem("myPlayerId", data.playerId);
+      sessionStorage.setItem("currentRoomId", data.roomId);
 
       // Navigate to waiting room
       this.$router.push(`/room/${data.roomId}`);

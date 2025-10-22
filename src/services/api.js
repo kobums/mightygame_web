@@ -47,19 +47,21 @@ class ApiService {
     });
   }
 
-  async getGameState(gameId) {
-    return this.request(`/api/game/${gameId}/state`);
+  async getGameState(roomId, playerId) {
+    return this.request(`/api/game/state/${roomId}?playerId=${playerId}`, {
+      method: "GET",
+    });
   }
 
   // Bidding APIs
-  async placeBid(gameId, playerId, bid, trumpType) {
+  async placeBid(roomId, playerId, bidType, trumpSuit = "") {
     return this.request("/api/game/bid", {
       method: "POST",
       body: JSON.stringify({
-        gameId,
+        roomId,
         playerId,
-        bid,
-        trumpType,
+        bidType,
+        trumpSuit,
       }),
     });
   }
