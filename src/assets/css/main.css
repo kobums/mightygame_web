@@ -1,0 +1,519 @@
+@charset "utf-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
+/*=================================================================================================
+reset
+===================================================================================================*/
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+p,
+blockquote,
+pre,
+code,
+address,
+ul,
+ol,
+li,
+menu,
+nav,
+section,
+article,
+aside,
+dl,
+dt,
+dd,
+table,
+thead,
+tbody,
+tfoot,
+label,
+caption,
+th,
+td,
+form,
+fieldset,
+legend,
+hr,
+input,
+button,
+textarea,
+object,
+figure,
+figcaption {
+  margin: 0;
+  padding: 0;
+  color: #333;
+  box-sizing: border-box;
+  font-weight: 400;
+}
+html {
+  font-size: 20px;
+}
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 1rem;
+}
+caption {
+  display: none;
+}
+img,
+fieldset {
+  border: none;
+}
+ul,
+ol,
+li {
+  list-style: none;
+}
+table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+address,
+cite,
+code,
+em {
+  font-style: normal;
+  font-weight: normal;
+}
+label,
+img,
+input,
+select,
+textarea,
+button,
+a {
+  vertical-align: middle;
+}
+a {
+  color: #676767;
+  text-decoration: none;
+}
+img {
+  vertical-align: middle;
+}
+
+.blind,
+caption {
+  font-size: 0;
+  line-height: 0;
+  text-indent: -10000px;
+}
+.win.safari caption {
+  display: none;
+}
+.baseline {
+  display: inline-block;
+  width: 0;
+  height: 100%;
+  font-size: 0;
+  line-height: 0;
+  vertical-align: middle;
+  margin-left: -5px;
+}
+.clearboth {
+  clear: both;
+  line-height: 0;
+}
+.clear {
+  clear: both;
+}
+.clear:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.hide {
+  overflow: hidden;
+  display: block;
+  position: absolute;
+  border: 0;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+button {
+  cursor: pointer;
+  border: none;
+  padding: 6px;
+  border-radius: 3px;
+}
+
+/*=================================================================================================
+card
+===================================================================================================*/
+.wrapper {
+  background-color: #16753e;
+  width: 100%;
+  height: 100vh;
+  box-shadow: inset 0 0 50px #165831;
+  background: linear-gradient(0deg, rgba(22, 88, 49, 1) 0%, rgba(22, 117, 62, 1) 100%);
+}
+
+.card-wrap {
+  width: 5rem;
+  height: 7rem;
+  text-align: center;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  border: 1px solid #333;
+  background-color: #fff;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2), 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+.card-wrap .point {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 6px;
+  left: 6px;
+}
+
+/* card simbol */
+.sim {
+  position: relative;
+  width: 1.3rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.sim::after {
+  position: relative;
+  font-size: 1.2rem;
+  line-height: 1.3rem;
+}
+.diamond::after {
+  content: " \2666";
+}
+.heart::after {
+  content: " \2665";
+}
+.spade::after {
+  content: " \2660";
+}
+.clover::after {
+  content: " \2663";
+}
+.card-joker {
+  writing-mode: vertical-rl;
+  -webkit-text-orientation: upright;
+  -moz-text-orientation: upright;
+  text-orientation: upright;
+  background: #fff url("../img/joker.png") no-repeat 44px 14px;
+  background-size: 80px;
+}
+.sim-only {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+}
+.sim-only .sim::after {
+  font-size: 2.5rem;
+  line-height: 2.5rem;
+  opacity: 0.2;
+}
+
+/* red color card : heart, dimond */
+.card-red > * {
+  color: rgb(224, 75, 75);
+}
+
+.card-back {
+  background: linear-gradient(135deg, #bfd352 25%, rgba(0, 0, 0, 0) 25.1%), linear-gradient(225deg, #8db716 25%, rgba(0, 0, 0, 0) 25.1%), linear-gradient(315deg, #8db716 25%, rgba(0, 0, 0, 0) 25.1%),
+    linear-gradient(45deg, #8db716 25%, rgba(0, 0, 0, 0) 25.1%), #ffffff;
+  background-size: 14px 14px;
+  background-position: -14px 0, -14px 0, 0 0, 0 0;
+}
+
+/* my card section */
+.my-section {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  padding: 0.8rem;
+}
+.my-card {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.my-card > div {
+  margin-left: -3rem;
+}
+.my-card > div {
+  margin-left: -3rem;
+}
+.my-card > div:nth-child(1) {
+  margin-left: 0;
+  transform: rotate(352deg);
+}
+.my-card > div:nth-child(2) {
+  z-index: 2;
+  transform: rotate(354deg);
+  bottom: 2px;
+}
+.my-card > div:nth-child(3) {
+  z-index: 3;
+  transform: rotate(356deg);
+  bottom: 4px;
+}
+.my-card > div:nth-child(4) {
+  z-index: 4;
+  transform: rotate(358deg);
+  bottom: 6px;
+}
+.my-card > div:nth-child(5) {
+  z-index: 5;
+  transform: rotate(0deg);
+  bottom: 8px;
+}
+.my-card > div:nth-child(6) {
+  z-index: 6;
+  transform: rotate(0deg);
+  bottom: 8px;
+}
+.my-card > div:nth-child(7) {
+  z-index: 7;
+  transform: rotate(2deg);
+  bottom: 6px;
+}
+.my-card > div:nth-child(8) {
+  z-index: 8;
+  transform: rotate(4deg);
+  bottom: 4px;
+}
+.my-card > div:nth-child(9) {
+  z-index: 9;
+  transform: rotate(6deg);
+  bottom: 2px;
+}
+.my-card > div:nth-child(10) {
+  z-index: 10;
+  transform: rotate(8deg);
+}
+/* point card section*/
+.point-card-area {
+  border: 1px dashed #165831;
+  background-color: #91bd09;
+  padding: 5px;
+  display: flex;
+}
+.point-card-area .card-wrap {
+  width: 2.5rem;
+  height: 3.5rem;
+  border-radius: 5px;
+}
+.point-card-area .card-wrap:nth-child(2) {
+  margin-left: -20px;
+  z-index: 2;
+}
+.point-card-area .card-wrap .point {
+  top: 2px;
+  left: 2px;
+}
+.point-card-area .sim {
+  font-size: 0.9rem;
+}
+.point-card-area .sim-only {
+  bottom: 0.2rem;
+  right: 0.2rem;
+}
+.point-card-area .sim-only .sim::after {
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+}
+
+@-webkit-keyframes greenPulse {
+  from {
+    -webkit-box-shadow: 0 0 1px #1c4405;
+  }
+  50% {
+    -webkit-box-shadow: 0 0 10px #1c4405;
+  }
+  to {
+    -webkit-box-shadow: 0 0 5px #1c4405;
+  }
+}
+.cd-send {
+  width: 50px;
+  height: 50px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid #c2ff50;
+  background: #91bd09;
+  outline: none;
+  position: fixed;
+  right: 15px;
+  bottom: 190px;
+  -webkit-animation-name: greenPulse;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+}
+
+.cd-send::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 16px;
+  z-index: 11;
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-top: 4px solid #fff;
+  border-left: 4px solid #fff;
+  transform: rotate(45deg);
+}
+
+/*=================================================================================================
+player section
+===================================================================================================*/
+/* player section */
+.player-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  padding: 0.8rem;
+}
+.player-sec {
+  /* background-color: rgb(49, 99, 88); */
+  flex: 0 0 40%;
+  margin: 2vh 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.player-sec .card-wrap {
+  width: 3.5rem;
+  height: 5rem;
+}
+.player-sec .sim {
+  font-size: 1rem;
+}
+.player-sec .sim-only {
+  bottom: 0.3rem;
+  right: 0.3rem;
+}
+.player-sec .sim-only .sim::after {
+  font-size: 1.6rem;
+  line-height: 1.6rem;
+}
+.player-name {
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.show-card {
+  position: absolute;
+  bottom: 2px;
+  left: 4px;
+  border: 2px solid #fff;
+  width: 14px;
+  height: 18px;
+  border-radius: 2px;
+  background: none;
+}
+.show-card::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: -8px;
+  border-left: 2px solid #fff;
+  border-top: 2px solid #fff;
+  width: 12px;
+  height: 16px;
+  border-radius: 2px;
+  background: none;
+}
+.player-sec:nth-child(2n) .show-card,
+.player-sec:nth-child(5) .show-card {
+  right: 0;
+  left: unset;
+}
+
+/*=================================================================================================
+pop
+===================================================================================================*/
+.modal-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 98;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-con {
+  transform: translateX(0);
+  z-index: 99;
+  width: 84%;
+  background-color: #fff;
+  padding: 2rem;
+  text-align: left;
+}
+/* close button */
+.modal-close {
+  position: absolute;
+  right: 25px;
+  top: 15px;
+  width: 28px;
+  height: 28px;
+  opacity: 0.3;
+}
+.modal-close:hover {
+  opacity: 1;
+}
+.modal-close:before,
+.modal-close:after {
+  position: absolute;
+  top: 0;
+  left: 15px;
+  content: " ";
+  height: 28px;
+  width: 2px;
+  background-color: #333;
+}
+.modal-close:before {
+  transform: rotate(45deg);
+}
+.modal-close:after {
+  transform: rotate(-45deg);
+}
+
+/* pop card list */
+.pop-body {
+  display: flex;
+  flex-direction: row;
+}
+.pop-body .card-wrap {
+  width: 2.5rem;
+  height: 3.5rem;
+}
+.pop-body .point {
+  top: 3px;
+  left: 3px;
+}
+.pop-body .sim {
+  font-size: 1rem;
+}
