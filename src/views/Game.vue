@@ -151,7 +151,8 @@ export default {
   },
   async mounted() {
     this.roomId = parseInt(this.$route.params.id);
-    this.myPlayerId = parseInt(localStorage.getItem("myPlayerId"));
+    // 대기실/로비는 sessionStorage 에 저장한다. 서버 식별은 플레이어 토큰으로 한다.
+    this.myPlayerId = parseInt(sessionStorage.getItem("myPlayerId"));
 
     await this.fetchGameState();
 
@@ -170,7 +171,7 @@ export default {
       if (!silent) this.loading = true;
 
       try {
-        const response = await api.getGameState(this.roomId, this.myPlayerId);
+        const response = await api.getGameState(this.roomId);
 
         if (response.code === "success") {
           this.gameState = response.game;
@@ -198,7 +199,7 @@ export default {
     },
     async placeBid(bidType, trumpSuit = "") {
       try {
-        const response = await api.placeBid(this.roomId, this.myPlayerId, bidType, trumpSuit);
+        const response = await api.placeBid(this.roomId, bidType, trumpSuit);
 
         if (response.code === "success") {
           this.selectedBidNumber = null;
