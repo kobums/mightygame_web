@@ -169,7 +169,8 @@ export default {
         console.log("playerId:", myPlayerId, "type:", typeof myPlayerId);
         console.log("room data:", this.room);
 
-        const response = await api.startGame(this.roomId, myPlayerId);
+        // 서버는 플레이어 토큰(X-Player-Token)으로 방장 여부를 확인한다.
+        const response = await api.startGame(this.roomId);
 
         console.log("=== Start game response ===");
         console.log("Full response:", response);
@@ -199,8 +200,7 @@ export default {
     },
     async leaveRoom() {
       try {
-        const myPlayerId = parseInt(sessionStorage.getItem("myPlayerId"));
-        await api.leaveRoom(this.roomId, myPlayerId);
+        await api.leaveRoom(this.roomId);
         sessionStorage.removeItem("currentRoomId");
         this.$router.push("/lobby");
       } catch (error) {
@@ -213,13 +213,11 @@ export default {
     leaveRoomQuietly() {
       // Silent leave without navigation (for page close)
       try {
-        const myPlayerId = parseInt(sessionStorage.getItem("myPlayerId"));
         const roomId = sessionStorage.getItem("currentRoomId");
-        if (myPlayerId && roomId) {
-          // Use sendBeacon for reliable page unload
-          const data = JSON.stringify({ roomId: parseInt(roomId), playerId: myPlayerId });
-          navigator.sendBeacon(`${api.baseURL}/api/room/leave`, data);
-          localStorage.removeItem("currentRoomId");
+        // 게임이 시작돼 게임 화면으로 넘어가는 경우에는 방을 나가지 않는다 (토큰 유지).
+        if (roomId && !(this.room && this.room.status === "playing")) {
+          // Use sendBeacon for reliable page unload (토큰은 본문으로 전달)
+          api.leaveRoomBeacon(parseInt(roomId));
         }
       } catch (error) {
         console.error("Failed to leave room quietly:", error);
